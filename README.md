@@ -96,7 +96,7 @@ flowchart LR
   <img src="Airbnb_ELT_README_with_images/images/fig4_1_bronze_schema_dbeaver.png" alt="Bronze schema in DBeaver" width="850">
 </p>
 
-<p align="center"><em>Figure 4.1: Bronze schema and the five raw tables created in Cloud SQL, viewed in DBeaver</em></p>
+<p align="center"><em>Figure 1.1: Bronze schema and the five raw tables created in Cloud SQL, viewed in DBeaver</em></p>
 
 The DAG `airbnb_bronze_loader` has five tasks:
 
@@ -118,13 +118,13 @@ The DAG `airbnb_bronze_loader` has five tasks:
   <img src="Airbnb_ELT_README_with_images/images/fig4_2_composer_dag_deployed.png" alt="DAG deployed on Cloud Composer" width="850">
 </p>
 
-<p align="center"><em>Figure 4.2: <code>airbnb_bronze_loader</code> deployed on Cloud Composer with Schedule: None (<code>schedule_interval=None</code>)</em></p>
+<p align="center"><em>Figure 1.2: <code>airbnb_bronze_loader</code> deployed on Cloud Composer with Schedule: None (<code>schedule_interval=None</code>)</em></p>
 
 <p align="center">
   <img src="Airbnb_ELT_README_with_images/images/fig4_3_part1_dag_run.png" alt="Successful Part 1 DAG run" width="850">
 </p>
 
-<p align="center"><em>Figure 4.3: Successful Part 1 run (<code>month_file = 05_2020.csv</code>): the four reference loads, then <code>load_listings</code></em></p>
+<p align="center"><em>Figure 1.3: Successful Part 1 run (<code>month_file = 05_2020.csv</code>): the four reference loads, then <code>load_listings</code></em></p>
 
 **Bronze control totals after the May 2020 run**
 
@@ -140,7 +140,7 @@ The DAG `airbnb_bronze_loader` has five tasks:
   <img src="Airbnb_ELT_README_with_images/images/fig4_4_bronze_row_counts.png" alt="Bronze row counts after Part 1" width="850">
 </p>
 
-<p align="center"><em>Figure 4.4: Bronze row counts after the Part 1 run match the source files exactly</em></p>
+<p align="center"><em>Figure 1.4: Bronze row counts after the Part 1 run match the source files exactly</em></p>
 
 ## ⭐ Part 2: dbt Data Warehouse (Silver & Gold)
 
@@ -183,13 +183,13 @@ ORDER BY host_id, month_year DESC
   <img src="Airbnb_ELT_README_with_images/images/fig5_1_gold_star_schema.png" alt="Gold star schema" width="850">
 </p>
 
-<p align="center"><em>Figure 5.1: Gold star schema</em></p>
+<p align="center"><em>Figure 2.1: Gold star schema</em></p>
 
 <p align="center">
   <img src="Airbnb_ELT_README_with_images/images/fig5_2_dbt_lineage.png" alt="dbt Cloud lineage graph" width="850">
 </p>
 
-<p align="center"><em>Figure 5.2: dbt Cloud lineage after the first job run: Silver models feed the five snapshots, which feed the Gold dimensions, the fact table and the three datamart views</em></p>
+<p align="center"><em>Figure 2.2: dbt Cloud lineage after the first job run: Silver models feed the five snapshots, which feed the Gold dimensions, the fact table and the three datamart views</em></p>
 
 Every downstream join is **point-in-time correct**:
 
@@ -218,13 +218,13 @@ JOIN gold.dim_listing_neighbourhood n
   <img src="Airbnb_ELT_README_with_images/images/fig5_3_datamart_views_output.png" alt="Datamart views output" width="850">
 </p>
 
-<p align="center"><em>Figure 5.3: Output of the three datamart views</em></p>
+<p align="center"><em>Figure 2.3: Output of the three datamart views</em></p>
 
 <p align="center">
   <img src="Airbnb_ELT_README_with_images/images/fig5_4_dbt_first_run.png" alt="First dbt Cloud job run" width="850">
 </p>
 
-<p align="center"><em>Figure 5.4: First run of the dbt Cloud job <code>monthly_build</code> after the May 2020 load: all 38 models, snapshots and tests succeeded</em></p>
+<p align="center"><em>Figure 2.4: First run of the dbt Cloud job <code>monthly_build</code> after the May 2020 load: all 38 models, snapshots and tests succeeded</em></p>
 
 After the first run, all four medallion layers are in Cloud SQL: Bronze (5 raw tables), Silver (8 cleaned tables and 5 snapshots), Gold (8 dimensions including the two Census references, plus `fact_listings`) and Datamart (3 views).
 
@@ -232,7 +232,7 @@ After the first run, all four medallion layers are in Cloud SQL: Bronze (5 raw t
   <img src="Airbnb_ELT_README_with_images/images/fig5_5_warehouse_layers.png" alt="Warehouse layers in Cloud SQL" width="380">
 </p>
 
-<p align="center"><em>Figure 5.5: Warehouse layers in Cloud SQL after the first dbt run: Bronze, Silver (with snapshots), Gold star schema and the three datamart views</em></p>
+<p align="center"><em>Figure 2.5: Warehouse layers in Cloud SQL after the first dbt run: Bronze, Silver (with snapshots), Gold star schema and the three datamart views</em></p>
 
 ## 🔁 Part 3: Loading the Remaining Months
 The remaining 11 months were loaded **strictly in chronological order**: trigger the DAG for one month, check the Bronze count, run the dbt Cloud job (`dbt build`), then move on to the next month.
@@ -253,7 +253,7 @@ Order matters because a timestamp snapshot only records a change between consecu
   <img src="Airbnb_ELT_README_with_images/images/fig6_1_rows_per_month.png" alt="Rows loaded per month" width="850">
 </p>
 
-<p align="center"><em>Figure 6.1: Rows loaded per month (412,122 total)</em></p>
+<p align="center"><em>Figure 3.1: Rows loaded per month (412,122 total)</em></p>
 
 August 2020's low point coincides with Sydney's second COVID-19 wave; volumes never returned to May 2020 levels by April 2021.
 
@@ -263,13 +263,13 @@ The `loaded_at` timestamps confirm that every file reached Bronze exactly once a
   <img src="Airbnb_ELT_README_with_images/images/fig6_2_bronze_counts_per_file.png" alt="Bronze row counts per source file" width="850">
 </p>
 
-<p align="center"><em>Figure 6.2: Bronze row counts per source file after all 12 loads; <code>loaded_at</code> shows the months were loaded strictly in order</em></p>
+<p align="center"><em>Figure 3.2: Bronze row counts per source file after all 12 loads; <code>loaded_at</code> shows the months were loaded strictly in order</em></p>
 
 <p align="center">
   <img src="Airbnb_ELT_README_with_images/images/fig6_3_dbt_run_history.png" alt="dbt Cloud run history" width="850">
 </p>
 
-<p align="center"><em>Figure 6.3: dbt Cloud run history for <code>monthly_build</code>: one manual run after each monthly load, all successful (about 49 s each; most recent 10 runs shown)</em></p>
+<p align="center"><em>Figure 3.3: dbt Cloud run history for <code>monthly_build</code>: one manual run after each monthly load, all successful (about 49 s each; most recent 10 runs shown)</em></p>
 
 ## 🔍 Part 4: Ad-hoc Analysis
 All queries in `part_4.sql` run against the Gold layer over the full 12 months. *Revenue per active listing* is a monthly figure: the average of `stays × price` over active listing-months.
@@ -280,13 +280,13 @@ All queries in `part_4.sql` run against the Gold layer over the full 12 months. 
   <img src="Airbnb_ELT_README_with_images/images/fig7_1_revenue_by_lga.png" alt="Average revenue per active listing by LGA" width="850">
 </p>
 
-<p align="center"><em>Figure 7.1: Average revenue per active listing by LGA (top 3 green, bottom 3 red)</em></p>
+<p align="center"><em>Figure 4.1: Average revenue per active listing by LGA (top 3 green, bottom 3 red)</em></p>
 
 <p align="center">
   <img src="Airbnb_ELT_README_with_images/images/fig7_2_top3_bottom3_table.png" alt="Top 3 vs Bottom 3 LGAs results" width="850">
 </p>
 
-<p align="center"><em>Figure 7.2: Results table of Top 3 vs Bottom 3 LGAs</em></p>
+<p align="center"><em>Figure 4.2: Results table of Top 3 vs Bottom 3 LGAs</em></p>
 
 - 👴 **Older:** median age 39–42 vs 33–36; 16.8–19.1% aged 65+ vs 10.3–13.9%
 - 🏠 **Smaller households:** 2.3–2.7 people vs 3.0–3.3, leaving more spare rooms and rentable property
@@ -298,19 +298,19 @@ All queries in `part_4.sql` run against the Gold layer over the full 12 months. 
   <img src="Airbnb_ELT_README_with_images/images/fig7_3_median_age_vs_revenue_scatter.png" alt="Median age vs revenue scatter plot" width="850">
 </p>
 
-<p align="center"><em>Figure 7.3: Scatter plot of median age vs revenue</em></p>
+<p align="center"><em>Figure 4.3: Scatter plot of median age vs revenue</em></p>
 
 <p align="center">
   <img src="Airbnb_ELT_README_with_images/images/fig7_4_correlation_results.png" alt="Correlation results in DBeaver" width="850">
 </p>
 
-<p align="center"><em>Figure 7.4: Results table from DBeaver</em></p>
+<p align="center"><em>Figure 4.4: Results table from DBeaver</em></p>
 
 <p align="center">
   <img src="Airbnb_ELT_README_with_images/images/fig7_5_median_age_revenue_by_lga.png" alt="Median age vs revenue per active listing across 29 LGAs" width="500">
 </p>
 
-<p align="center"><em>Figure 7.5: Median age vs revenue per active listing across 29 LGAs</em></p>
+<p align="center"><em>Figure 4.5: Median age vs revenue per active listing across 29 LGAs</em></p>
 
 - Moderate positive correlation: r = 0.655, R² = 0.429, Spearman ρ = 0.576, so the result is not driven by Mosman alone.
 - Household income correlates more strongly (r = 0.728), so median age is unlikely to be causal. With only 29 LGAs, the estimate is sensitive to outliers.
@@ -322,7 +322,7 @@ All queries in `part_4.sql` run against the Gold layer over the full 12 months. 
   <img src="Airbnb_ELT_README_with_images/images/fig7_6_best_listing_config.png" alt="Best listing configuration per top 5 neighbourhood" width="850">
 </p>
 
-<p align="center"><em>Figure 7.6: Best listing configuration per top 5 neighbourhood</em></p>
+<p align="center"><em>Figure 4.6: Best listing configuration per top 5 neighbourhood</em></p>
 
 - An **entire apartment for 2–4 guests** is the most-booked format in all five, at 24–28 stays per month.
 - Larger entire homes (6–9 guests) reach slightly higher occupancy, but only across 10–12 listings each, so they are a niche rather than a scalable strategy.
@@ -333,7 +333,7 @@ All queries in `part_4.sql` run against the Gold layer over the full 12 months. 
   <img src="Airbnb_ELT_README_with_images/images/fig7_7_hosts_by_distinct_lgas.png" alt="Multi-listing hosts by number of distinct LGAs" width="850">
 </p>
 
-<p align="center"><em>Figure 7.7: Multi-listing hosts by number of distinct LGAs</em></p>
+<p align="center"><em>Figure 4.7: Multi-listing hosts by number of distinct LGAs</em></p>
 
 - 76.7% of multi-listing hosts operate in a single LGA and a further 17.9% in two.
 
@@ -341,7 +341,7 @@ All queries in `part_4.sql` run against the Gold layer over the full 12 months. 
   <img src="Airbnb_ELT_README_with_images/images/fig7_8_single_lga_share_by_portfolio.png" alt="Single-LGA share by portfolio size" width="850">
 </p>
 
-<p align="center"><em>Figure 7.8: Single-LGA share by portfolio size</em></p>
+<p align="center"><em>Figure 4.8: Single-LGA share by portfolio size</em></p>
 
 - Spread grows with portfolio size: hosts with 11+ listings average 4.2 LGAs, behaving like professional property managers.
 
@@ -351,13 +351,13 @@ All queries in `part_4.sql` run against the Gold layer over the full 12 months. 
   <img src="Airbnb_ELT_README_with_images/images/fig7_9_mortgage_cover_by_lga.png" alt="Share of single-listing hosts covering the median mortgage" width="850">
 </p>
 
-<p align="center"><em>Figure 7.9: Share of single-listing hosts covering the annualised median mortgage repayment</em></p>
+<p align="center"><em>Figure 4.9: Share of single-listing hosts covering the annualised median mortgage repayment</em></p>
 
 <p align="center">
   <img src="Airbnb_ELT_README_with_images/images/fig7_10_mortgage_cover_results.png" alt="Mortgage cover results in DBeaver" width="850">
 </p>
 
-<p align="center"><em>Figure 7.10: Results table from DBeaver</em></p>
+<p align="center"><em>Figure 4.10: Results table from DBeaver</em></p>
 
 - 43.5% of single-listing hosts earn at least their LGA's annualised median mortgage repayment.
 - **Northern Beaches leads at 56.5%**: median host revenue A$40,884 vs a A$33,600 annual mortgage.
